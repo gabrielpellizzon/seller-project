@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { UsersModule } from './users/users.module';
 import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
@@ -18,6 +19,7 @@ import * as redisStore from 'cache-manager-redis-store';
     MongooseModule.forRoot(process.env.DATABASE_URI),
     ProductsModule,
     OrdersModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
