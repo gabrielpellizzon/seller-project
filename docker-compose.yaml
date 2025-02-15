@@ -9,6 +9,14 @@ services:
     volumes:
       - mongodb_data_container:/data/db
 
+  redis:
+    container_name: cache
+    image: redis
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - redis:/data
+
   api:
     build: .
     volumes:
@@ -21,6 +29,9 @@ services:
       - .env
     depends_on:
       - mongodb
+      - redis
 
 volumes:
+  redis:
+    driver: local
   mongodb_data_container:
