@@ -24,18 +24,18 @@ export class ProductsService {
     return this.productModel.find();
   }
 
-  async findOneProduct(id: number): Promise<ProductDocument> {
+  async findOneProduct(id: string): Promise<ProductDocument> {
     return this.productModel.findById(id);
   }
 
   async updateProduct(
-    id: number,
+    id: string,
     updateProductDto: UpdateProductDto,
   ): Promise<ProductDocument> {
     return this.productModel.findByIdAndUpdate(id, updateProductDto);
   }
 
-  async removeProduct(id: number): Promise<ProductDocument> {
+  async removeProduct(id: string): Promise<ProductDocument> {
     return this.productModel.findByIdAndDelete(id);
   }
 }
