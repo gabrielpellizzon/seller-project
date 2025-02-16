@@ -10,7 +10,7 @@ import { Model } from 'mongoose';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
-import { UserPayload } from './interfaces/user-login.interface';
+import { LoginResponse, UserPayload } from './interfaces/user-login.interface';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +20,7 @@ export class UsersService {
     private jwtService: JwtService,
   ) {}
 
-  async registerUser(createUserDto: CreateUserDto): Promise<UserDocument> {
+  async registerUser(createUserDto: CreateUserDto) {
     const newUser = new this.userModel({
       email: createUserDto.email,
       password: await hash(createUserDto.password, 10),
@@ -30,7 +30,7 @@ export class UsersService {
     return newUser.save();
   }
 
-  async loginUser(loginUserDto: LoginUserDto) {
+  async loginUser(loginUserDto: LoginUserDto): Promise<LoginResponse> {
     const user = await this.findUserByEmail(loginUserDto.email);
 
     if (!(await compare(loginUserDto.password, user.password))) {
@@ -43,7 +43,7 @@ export class UsersService {
       name: user.name,
     };
 
-    return { accessToken: await this.jwtService.signAsync(payload) };
+    return { access_token: await this.jwtService.signAsync(payload) };
   }
 
   private async findUserByEmail(userEmail: string) {
