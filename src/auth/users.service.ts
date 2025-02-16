@@ -21,13 +21,22 @@ export class UsersService {
   ) {}
 
   async registerUser(createUserDto: CreateUserDto) {
+    if (await this.isEmailTaken(createUserDto.email)) {
+      throw new HttpException('Email already exists', 400);
+    }
+
     const newUser = new this.userModel({
       email: createUserDto.email,
       password: await hash(createUserDto.password, 10),
       name: createUserDto.name,
     } as CreateUserDto);
 
-    return newUser.save();
+    await newUser.save();
+
+    const userObject = newUser.toObject();
+    delete userObject.password;
+
+    return userObject;
   }
 
   async loginUser(loginUserDto: LoginUserDto): Promise<LoginResponse> {
@@ -53,5 +62,10 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  private async isEmailTaken(email: string): Promise<boolean> {
+    const user = await this.userModel.findOne({ email });
+    return !!user;
   }
 }
