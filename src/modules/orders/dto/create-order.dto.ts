@@ -22,12 +22,12 @@ class ProductOrderDto {
 
 export class CreateOrderDto {
   @IsString()
-  @IsNotEmpty()
-  customerName: string;
+  @IsOptional()
+  customerName?: string;
 
   @IsString()
-  @IsNotEmpty()
-  customerEmail: string;
+  @IsOptional()
+  customerEmail?: string;
 
   @IsArray()
   @ValidateNested({ each: true })

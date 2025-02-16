@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Order, OrderDocument } from 'src/schemas/order.schema';
 import { Model } from 'mongoose';
 import { Product, ProductDocument } from 'src/schemas/product.schema';
+import { ExpressRequestWithUser } from 'src/auth/interfaces/express-request-with-user.interface';
 
 @Injectable()
 export class OrdersService {
@@ -14,10 +15,10 @@ export class OrdersService {
     private readonly productModel: Model<ProductDocument>,
   ) {}
 
-  async createOrder({
-    products,
-    ...createOrderDto
-  }: CreateOrderDto): Promise<OrderDocument> {
+  async createOrder(
+    { products }: CreateOrderDto,
+    req: ExpressRequestWithUser,
+  ): Promise<OrderDocument> {
     let totalAmount = 0;
 
     for (const { productId, quantity: orderQuantity } of products) {
@@ -32,7 +33,8 @@ export class OrdersService {
     const order = await this.createOrderInDatabase({
       products,
       totalAmount,
-      ...createOrderDto,
+      customerEmail: req.user.email,
+      customerName: req.user.name,
     });
 
     return order;
@@ -63,7 +65,11 @@ export class OrdersService {
   }
 
   private async createOrderInDatabase(
-    createOrderDto: CreateOrderDto & { totalAmount: number },
+    createOrderDto: CreateOrderDto & {
+      totalAmount: number;
+      customerEmail: string;
+      customerName: string;
+    },
   ): Promise<OrderDocument> {
     const order = new this.orderModel(createOrderDto);
     return order.save();
