@@ -16,7 +16,7 @@ export class OrdersService {
   ) {}
 
   async createOrder(
-    { products }: CreateOrderDto,
+    { products, customerName, customerEmail }: CreateOrderDto,
     req: ExpressRequestWithUser,
   ): Promise<OrderDocument> {
     let totalAmount = 0;
@@ -33,8 +33,8 @@ export class OrdersService {
     const order = await this.createOrderInDatabase({
       products,
       totalAmount,
-      customerEmail: req.user.email,
-      customerName: req.user.name,
+      customerEmail: customerEmail,
+      customerName: customerName,
     });
 
     return order;

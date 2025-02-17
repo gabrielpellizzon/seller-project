@@ -34,11 +34,13 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @Public()
   findOneProduct(@Param('id') id: string) {
     return this.productsService.findOneProduct(id);
   }
 
   @Patch(':id')
+  @Public()
   updateProduct(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -46,6 +48,7 @@ export class ProductsController {
     return this.productsService.updateProduct(id, updateProductDto);
   }
 
+  @Public()
   @Delete(':id')
   removeProduct(@Param('id') id: string) {
     return this.productsService.removeProduct(id);
