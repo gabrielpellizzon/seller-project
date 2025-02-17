@@ -37,16 +37,16 @@ Make sure you have the following tools installed:
    cd seller-project
    ```
 
-2. Start the Docker container with the database:
-
-   ```bash
-   docker-compose up -d --build
-   ```
-
-3. Install backend dependencies:
+2. Install backend dependencies:
 
    ```bash
    npm install
+   ```
+
+3. Start the Docker container with the database:
+
+   ```bash
+   docker-compose up -d --build
    ```
 
 4. Start the server:
